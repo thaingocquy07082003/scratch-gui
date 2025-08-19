@@ -1,0 +1,94 @@
+.toggleContainer {
+    display: flex;
+    align-items: center;
+    margin: 0 0.25rem;
+}
+
+.toggleSwitch {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: #4a90e2; /* Medium-dark blue background */
+    border: none;
+    border-radius: 20px;
+    padding: 4px 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+    height: 36px;
+    outline: none;
+}
+
+.toggleSwitch:hover {
+    background-color: #357abd;
+}
+
+.toggleSwitch:focus {
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.3);
+}
+
+.toggleSwitch.off {
+    background-color: #4a90e2;
+}
+
+.toggleSwitch.on {
+    background-color: #2ecc71; /* Green when active */
+}
+
+.toggleSwitch.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.toggleThumb {
+    position: absolute;
+    left: 4px;
+    width: 28px;
+    height: 28px;
+    background-color: #87ceeb; /* Light blue thumb */
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggleSwitch.on .toggleThumb {
+    left: calc(100% - 32px);
+    background-color: #ffffff; /* White thumb when active */
+}
+
+.toggleLabel {
+    color: #87ceeb; /* Light blue text */
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 36px; /* Space for thumb */
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.toggleSwitch.on .toggleLabel {
+    color: #ffffff; /* White text when active */
+    margin-left: 8px; /* Adjust margin when active */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .toggleSwitch {
+        min-width: 100px;
+        height: 32px;
+        padding: 3px 10px;
+    }
+
+    .toggleThumb {
+        width: 24px;
+        height: 24px;
+    }
+
+    .toggleLabel {
+        font-size: 12px;
+        margin-left: 32px;
+    }
+
+    .toggleSwitch.on .toggleLabel {
+        margin-left: 6px;
+    }
+}

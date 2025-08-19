@@ -11,11 +11,11 @@ import VM from 'scratch-vm';
 
 import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
-import CommunityButton from './community-button.jsx';
+
 import ShareButton from './share-button.jsx';
 import {ComingSoonTooltip} from '../coming-soon/coming-soon.jsx';
 import Divider from '../divider/divider.jsx';
-import SaveStatus from './save-status.jsx';
+
 import ProjectWatcher from '../../containers/project-watcher.jsx';
 import MenuBarMenu from './menu-bar-menu.jsx';
 import {MenuItem, MenuSection} from '../menu/menu.jsx';
@@ -29,17 +29,11 @@ import TurboMode from '../../containers/turbo-mode.jsx';
 import MenuBarHOC from '../../containers/menu-bar-hoc.jsx';
 import SettingsMenu from './settings-menu.jsx';
 import SelectDevice from '../../containers/select-device.jsx';
+import RealtimeToggle from '../../containers/realtime-toggle.jsx';
 
 import {openTipsLibrary, openDebugModal} from '../../reducers/modals';
 import {setPlayer} from '../../reducers/mode';
-import {
-    isTimeTravel220022BC,
-    isTimeTravel1920,
-    isTimeTravel1990,
-    isTimeTravel2020,
-    isTimeTravelNow,
-    setTimeTravel
-} from '../../reducers/time-travel';
+
 import {
     autoUpdateProject,
     getIsUpdating,
@@ -65,9 +59,6 @@ import {
     openLoginMenu,
     closeLoginMenu,
     loginMenuOpen,
-    openModeMenu,
-    closeModeMenu,
-    modeMenuOpen,
     settingsMenuOpen,
     openSettingsMenu,
     closeSettingsMenu
@@ -78,7 +69,7 @@ import collectMetadata from '../../lib/collect-metadata';
 import styles from './menu-bar.css';
 
 import helpIcon from '../../lib/assets/icon--tutorials.svg';
-import mystuffIcon from './icon--mystuff.png';
+
 import profileIcon from './icon--profile.png';
 import remixIcon from './icon--remix.svg';
 import dropdownCaret from './dropdown-caret.svg';
@@ -88,10 +79,7 @@ import editIcon from './icon--edit.svg';
 import debugIcon from '../debug-modal/icons/icon--debug.svg';
 
 import scratchLogo from './scratch-logo.svg';
-import ninetiesLogo from './nineties_logo.svg';
-import catLogo from './cat_logo.svg';
-import prehistoricLogo from './prehistoric-logo.svg';
-import oldtimeyLogo from './oldtimey-logo.svg';
+
 
 import sharedMessages from '../../lib/shared-messages';
 
@@ -183,9 +171,8 @@ class MenuBar extends React.Component {
             'handleClickRemix',
             'handleClickSave',
             'handleClickSaveAsCopy',
-            'handleClickSeeCommunity',
+
             'handleClickShare',
-            'handleSetMode',
             'handleKeyPress',
             'handleRestoreOption',
             'getSaveToComputerHandler',
@@ -225,14 +212,7 @@ class MenuBar extends React.Component {
         this.props.onClickSaveAsCopy();
         this.props.onRequestCloseFile();
     }
-    handleClickSeeCommunity (waitForUpdate) {
-        if (this.props.shouldSaveBeforeTransition()) {
-            this.props.autoUpdateProject(); // save before transitioning to project page
-            waitForUpdate(true); // queue the transition to project page
-        } else {
-            waitForUpdate(false); // immediately transition to project page
-        }
-    }
+
     handleClickShare (waitForUpdate) {
         if (!this.props.isShared) {
             if (this.props.canShare) { // save before transitioning to project page
@@ -246,36 +226,7 @@ class MenuBar extends React.Component {
             }
         }
     }
-    handleSetMode (mode) {
-        return () => {
-            // Turn on/off filters for modes.
-            if (mode === '1920') {
-                document.documentElement.style.filter = 'brightness(.9)contrast(.8)sepia(1.0)';
-                document.documentElement.style.height = '100%';
-            } else if (mode === '1990') {
-                document.documentElement.style.filter = 'hue-rotate(40deg)';
-                document.documentElement.style.height = '100%';
-            } else {
-                document.documentElement.style.filter = '';
-                document.documentElement.style.height = '';
-            }
 
-            // Change logo for modes
-            if (mode === '1990') {
-                document.getElementById('logo_img').src = ninetiesLogo;
-            } else if (mode === '2020') {
-                document.getElementById('logo_img').src = catLogo;
-            } else if (mode === '1920') {
-                document.getElementById('logo_img').src = oldtimeyLogo;
-            } else if (mode === '220022BC') {
-                document.getElementById('logo_img').src = prehistoricLogo;
-            } else {
-                document.getElementById('logo_img').src = this.props.logo;
-            }
-
-            this.props.onSetTimeTravelMode(mode);
-        };
-    }
     handleRestoreOption (restoreFun) {
         return () => {
             restoreFun();
@@ -576,53 +527,6 @@ class MenuBar extends React.Component {
                         <SelectDevice
                             isRtl={this.props.isRtl}
                         />
-                        {this.props.isTotallyNormal && (
-                            <div
-                                className={classNames(styles.menuBarItem, styles.hoverable, {
-                                    [styles.active]: this.props.modeMenuOpen
-                                })}
-                                onMouseUp={this.props.onClickMode}
-                            >
-                                <div className={classNames(styles.editMenu)}>
-                                    <FormattedMessage
-                                        defaultMessage="Mode"
-                                        description="Mode menu item in the menu bar"
-                                        id="gui.menuBar.modeMenu"
-                                    />
-                                </div>
-                                <MenuBarMenu
-                                    className={classNames(styles.menuBarMenu)}
-                                    open={this.props.modeMenuOpen}
-                                    place={this.props.isRtl ? 'left' : 'right'}
-                                    onRequestClose={this.props.onRequestCloseMode}
-                                >
-                                    <MenuSection>
-                                        <MenuItem onClick={this.handleSetMode('NOW')}>
-                                            <span className={classNames({[styles.inactive]: !this.props.modeNow})}>
-                                                {'✓'}
-                                            </span>
-                                            {' '}
-                                            <FormattedMessage
-                                                defaultMessage="Normal mode"
-                                                description="April fools: resets editor to not have any pranks"
-                                                id="gui.menuBar.normalMode"
-                                            />
-                                        </MenuItem>
-                                        <MenuItem onClick={this.handleSetMode('2020')}>
-                                            <span className={classNames({[styles.inactive]: !this.props.mode2020})}>
-                                                {'✓'}
-                                            </span>
-                                            {' '}
-                                            <FormattedMessage
-                                                defaultMessage="Caturday mode"
-                                                description="April fools: Cat blocks mode"
-                                                id="gui.menuBar.caturdayMode"
-                                            />
-                                        </MenuItem>
-                                    </MenuSection>
-                                </MenuBarMenu>
-                            </div>
-                        )}
                     </div>
                     {this.props.canEditTitle ? (
                         <div className={classNames(styles.menuBarItem, styles.growable)}>
@@ -672,30 +576,6 @@ class MenuBar extends React.Component {
                         )}
                         {this.props.canRemix ? remixButton : []}
                     </div>
-                    <div className={classNames(styles.menuBarItem, styles.communityButtonWrapper)}>
-                        {this.props.enableCommunity ? (
-                            (this.props.isShowingProject || this.props.isUpdating) && (
-                                <ProjectWatcher onDoneUpdating={this.props.onSeeCommunity}>
-                                    {
-                                        waitForUpdate => (
-                                            <CommunityButton
-                                                className={styles.menuBarButton}
-                                                /* eslint-disable react/jsx-no-bind */
-                                                onClick={() => {
-                                                    this.handleClickSeeCommunity(waitForUpdate);
-                                                }}
-                                                /* eslint-enable react/jsx-no-bind */
-                                            />
-                                        )
-                                    }
-                                </ProjectWatcher>
-                            )
-                        ) : (this.props.showComingSoon ? (
-                            <MenuBarItemTooltip id="community-button">
-                                <CommunityButton className={styles.menuBarButton} />
-                            </MenuBarItemTooltip>
-                        ) : [])}
-                    </div>
                     <Divider className={classNames(styles.divider)} />
                     <div className={styles.fileGroup}>
                         <div
@@ -733,28 +613,13 @@ class MenuBar extends React.Component {
                 logged in, and whether a session is available to log in with */}
                 <div className={styles.accountInfoGroup}>
                     <div className={styles.menuBarItem}>
-                        {this.props.canSave && (
-                            <SaveStatus />
-                        )}
+                        <RealtimeToggle />
                     </div>
                     {this.props.sessionExists ? (
                         this.props.username ? (
                             // ************ user is logged in ************
                             <React.Fragment>
-                                <a href="/mystuff/">
-                                    <div
-                                        className={classNames(
-                                            styles.menuBarItem,
-                                            styles.hoverable,
-                                            styles.mystuffButton
-                                        )}
-                                    >
-                                        <img
-                                            className={styles.mystuffIcon}
-                                            src={mystuffIcon}
-                                        />
-                                    </div>
-                                </a>
+
                                 <AccountNav
                                     className={classNames(
                                         styles.menuBarItem,
@@ -814,47 +679,31 @@ class MenuBar extends React.Component {
                         // ******** no login session is available, so don't show login stuff
                         <React.Fragment>
                             {this.props.showComingSoon ? (
-                                <React.Fragment>
-                                    <MenuBarItemTooltip id="mystuff">
-                                        <div
-                                            className={classNames(
-                                                styles.menuBarItem,
-                                                styles.hoverable,
-                                                styles.mystuffButton
-                                            )}
-                                        >
-                                            <img
-                                                className={styles.mystuffIcon}
-                                                src={mystuffIcon}
-                                            />
-                                        </div>
-                                    </MenuBarItemTooltip>
-                                    <MenuBarItemTooltip
-                                        id="account-nav"
-                                        place={this.props.isRtl ? 'right' : 'left'}
+                                <MenuBarItemTooltip
+                                    id="account-nav"
+                                    place={this.props.isRtl ? 'right' : 'left'}
+                                >
+                                    <div
+                                        className={classNames(
+                                            styles.menuBarItem,
+                                            styles.hoverable,
+                                            styles.accountNavMenu
+                                        )}
                                     >
-                                        <div
-                                            className={classNames(
-                                                styles.menuBarItem,
-                                                styles.hoverable,
-                                                styles.accountNavMenu
-                                            )}
-                                        >
-                                            <img
-                                                className={styles.profileIcon}
-                                                src={profileIcon}
-                                            />
-                                            <span>
-                                                {'scratch-cat'}
-                                            </span>
-                                            <img
-                                                className={styles.dropdownCaretIcon}
-                                                src={dropdownCaret}
-                                            />
-                                        </div>
-                                    </MenuBarItemTooltip>
-                                </React.Fragment>
-                            ) : []}
+                                        <img
+                                            className={styles.profileIcon}
+                                            src={profileIcon}
+                                        />
+                                        <span>
+                                            {'scratch-cat'}
+                                        </span>
+                                        <img
+                                            className={styles.dropdownCaretIcon}
+                                            src={dropdownCaret}
+                                        />
+                                    </div>
+                                </MenuBarItemTooltip>
+                            ) : null}
                         </React.Fragment>
                     )}
                 </div>
@@ -896,12 +745,7 @@ MenuBar.propTypes = {
     locale: PropTypes.string.isRequired,
     loginMenuOpen: PropTypes.bool,
     logo: PropTypes.string,
-    mode1920: PropTypes.bool,
-    mode1990: PropTypes.bool,
-    mode2020: PropTypes.bool,
-    mode220022BC: PropTypes.bool,
-    modeMenuOpen: PropTypes.bool,
-    modeNow: PropTypes.bool,
+
     onClickAbout: PropTypes.oneOfType([
         PropTypes.func, // button mode: call this callback when the About button is clicked
         PropTypes.arrayOf( // menu mode: list of items in the About menu
@@ -916,7 +760,6 @@ MenuBar.propTypes = {
     onClickFile: PropTypes.func,
     onClickLogin: PropTypes.func,
     onClickLogo: PropTypes.func,
-    onClickMode: PropTypes.func,
     onClickNew: PropTypes.func,
     onClickRemix: PropTypes.func,
     onClickSave: PropTypes.func,
@@ -932,11 +775,9 @@ MenuBar.propTypes = {
     onRequestCloseEdit: PropTypes.func,
     onRequestCloseFile: PropTypes.func,
     onRequestCloseLogin: PropTypes.func,
-    onRequestCloseMode: PropTypes.func,
     onRequestCloseSettings: PropTypes.func,
     onRequestOpenAbout: PropTypes.func,
     onSeeCommunity: PropTypes.func,
-    onSetTimeTravelMode: PropTypes.func,
     onShare: PropTypes.func,
     onStartSelectingFileUpload: PropTypes.func,
     onToggleLoginOpen: PropTypes.func,
@@ -970,19 +811,15 @@ const mapStateToProps = (state, ownProps) => {
         isShowingProject: getIsShowingProject(loadingState),
         locale: state.locales.locale,
         loginMenuOpen: loginMenuOpen(state),
-        modeMenuOpen: modeMenuOpen(state),
+
         projectTitle: state.scratchGui.projectTitle,
         sessionExists: state.session && typeof state.session.session !== 'undefined',
         settingsMenuOpen: settingsMenuOpen(state),
         username: user ? user.username : null,
         userOwnsProject: ownProps.authorUsername && user &&
             (ownProps.authorUsername === user.username),
-        vm: state.scratchGui.vm,
-        mode220022BC: isTimeTravel220022BC(state),
-        mode1920: isTimeTravel1920(state),
-        mode1990: isTimeTravel1990(state),
-        mode2020: isTimeTravel2020(state),
-        modeNow: isTimeTravelNow(state)
+        vm: state.scratchGui.vm
+
     };
 };
 
@@ -998,8 +835,7 @@ const mapDispatchToProps = dispatch => ({
     onRequestCloseEdit: () => dispatch(closeEditMenu()),
     onClickLogin: () => dispatch(openLoginMenu()),
     onRequestCloseLogin: () => dispatch(closeLoginMenu()),
-    onClickMode: () => dispatch(openModeMenu()),
-    onRequestCloseMode: () => dispatch(closeModeMenu()),
+
     onRequestOpenAbout: () => dispatch(openAboutMenu()),
     onRequestCloseAbout: () => dispatch(closeAboutMenu()),
     onClickSettings: () => dispatch(openSettingsMenu()),
@@ -1008,8 +844,8 @@ const mapDispatchToProps = dispatch => ({
     onClickRemix: () => dispatch(remixProject()),
     onClickSave: () => dispatch(manualUpdateProject()),
     onClickSaveAsCopy: () => dispatch(saveProjectAsCopy()),
-    onSeeCommunity: () => dispatch(setPlayer(true)),
-    onSetTimeTravelMode: mode => dispatch(setTimeTravel(mode))
+    onSeeCommunity: () => dispatch(setPlayer(true))
+
 });
 
 export default compose(
