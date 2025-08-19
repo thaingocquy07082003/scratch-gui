@@ -78,7 +78,7 @@ import fileIcon from './icon--file.svg';
 import editIcon from './icon--edit.svg';
 import debugIcon from '../debug-modal/icons/icon--debug.svg';
 
-import scratchLogo from './scratch-logo.svg';
+import scratchLogo from './windify-logo.svg';
 
 
 import sharedMessages from '../../lib/shared-messages';

@@ -2,6 +2,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import ToggleSwitch from '../components/toggle-switch/toggle-switch.jsx';
+import {setRealtimeMode} from '../reducers/realtime-mode';
 
 const RealtimeToggle = ({isRealtimeOn, onToggleRealtime}) => (
     <ToggleSwitch
@@ -17,11 +18,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     onToggleRealtime: isOn => {
-        // Dispatch action to toggle realtime mode
-        dispatch({
-            type: 'scratch-gui/realtime-mode/SET_REALTIME_MODE',
-            realtimeMode: isOn
-        });
+        dispatch(setRealtimeMode(isOn));
     }
 });
 

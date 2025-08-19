@@ -11,7 +11,8 @@ class Controls extends React.Component {
         super(props);
         bindAll(this, [
             'handleGreenFlagClick',
-            'handleStopAllClick'
+            'handleStopAllClick',
+            'handleRunCodeClick'
         ]);
     }
     handleGreenFlagClick (e) {
@@ -29,12 +30,21 @@ class Controls extends React.Component {
         e.preventDefault();
         this.props.vm.stopAll();
     }
+    handleRunCodeClick (e) {
+        e.preventDefault();
+        // In realtime mode, clicking Run Code will execute the code immediately
+        if (!this.props.isStarted) {
+            this.props.vm.start();
+        }
+        this.props.vm.greenFlag();
+    }
     render () {
         const {
             vm, // eslint-disable-line no-unused-vars
             isStarted, // eslint-disable-line no-unused-vars
             projectRunning,
             turbo,
+            isRealtimeMode,
             ...props
         } = this.props;
         return (
@@ -42,8 +52,10 @@ class Controls extends React.Component {
                 {...props}
                 active={projectRunning}
                 turbo={turbo}
+                isRealtimeMode={isRealtimeMode}
                 onGreenFlagClick={this.handleGreenFlagClick}
                 onStopAllClick={this.handleStopAllClick}
+                onRunCodeClick={this.handleRunCodeClick}
             />
         );
     }
@@ -53,13 +65,15 @@ Controls.propTypes = {
     isStarted: PropTypes.bool.isRequired,
     projectRunning: PropTypes.bool.isRequired,
     turbo: PropTypes.bool.isRequired,
+    isRealtimeMode: PropTypes.bool,
     vm: PropTypes.instanceOf(VM)
 };
 
 const mapStateToProps = state => ({
     isStarted: state.scratchGui.vmStatus.running,
     projectRunning: state.scratchGui.vmStatus.running,
-    turbo: state.scratchGui.vmStatus.turbo
+    turbo: state.scratchGui.vmStatus.turbo,
+    isRealtimeMode: state.scratchGui.realtimeMode.realtimeMode || false
 });
 // no-op function to prevent dispatch prop being passed to component
 const mapDispatchToProps = () => ({});
