@@ -41,16 +41,16 @@ const emptySprite = (name, soundName, costumeName) => ({
         {
             costumeName: costumeName,
             baseLayerID: -1,
-            baseLayerMD5: 'cd21514d0531fdffb22204e0ec5ed84a.svg',
-            bitmapResolution: 1,
+            baseLayerMD5: 'D27242E7A606BF531BFADB942764BE12.png',
+            bitmapResolution: 2,
             rotationCenterX: 0,
             rotationCenterY: 0
         }
     ],
     currentCostumeIndex: 0,
-    scratchX: 36,
-    scratchY: 28,
-    scale: 1,
+    scratchX: -58,
+    scratchY: 74,
+    scale: 0.5,
     direction: 90,
     rotationStyle: 'normal',
     isDraggable: false,

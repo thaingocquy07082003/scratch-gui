@@ -4,8 +4,8 @@ import projectData from './project-data';
 import popWav from '!arraybuffer-loader!./83a9787d4cb6f3b7632b4ddfebf74367.wav?';
 import meowWav from '!arraybuffer-loader!./83c36d806dc92327b9e7049a565c6bff.wav?';
 import backdrop from '!raw-loader!./cd21514d0531fdffb22204e0ec5ed84a.svg?';
-import costume1 from '!raw-loader!./bcf454acf82e4504149f7ffe07081dbc.svg?';
-import costume2 from '!raw-loader!./0fb9be3e8397c983338cb71dc84d0b25.svg?';
+import costume1 from '!arraybuffer-loader!./D27242E7A606BF531BFADB942764BE12.png?';
+import costume2 from '!arraybuffer-loader!./7AD771519D78ECA7D9EAC636C0400118.png?';
 /* eslint-enable import/no-unresolved */
 
 const defaultProject = translator => {
@@ -39,15 +39,15 @@ const defaultProject = translator => {
         dataFormat: 'SVG',
         data: encoder.encode(backdrop)
     }, {
-        id: 'bcf454acf82e4504149f7ffe07081dbc',
-        assetType: 'ImageVector',
-        dataFormat: 'SVG',
-        data: encoder.encode(costume1)
+        id: 'D27242E7A606BF531BFADB942764BE12',
+        assetType: 'ImageBitmap',
+        dataFormat: 'PNG',
+        data: new Uint8Array(costume1)
     }, {
-        id: '0fb9be3e8397c983338cb71dc84d0b25',
-        assetType: 'ImageVector',
-        dataFormat: 'SVG',
-        data: encoder.encode(costume2)
+        id: '7AD771519D78ECA7D9EAC636C0400118',
+        assetType: 'ImageBitmap',
+        dataFormat: 'PNG',
+        data: new Uint8Array(costume2)
     }];
 };
 

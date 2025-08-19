@@ -74,22 +74,22 @@ const projectData = translateFunction => {
                 currentCostume: 0,
                 costumes: [
                     {
-                        assetId: 'bcf454acf82e4504149f7ffe07081dbc',
+                        assetId: 'D27242E7A606BF531BFADB942764BE12',
                         name: translator(messages.costume, {index: 1}),
-                        bitmapResolution: 1,
-                        md5ext: 'bcf454acf82e4504149f7ffe07081dbc.svg',
-                        dataFormat: 'svg',
-                        rotationCenterX: 48,
-                        rotationCenterY: 50
+                        bitmapResolution: 2,
+                        md5ext: 'D27242E7A606BF531BFADB942764BE12.png',
+                        dataFormat: 'png',
+                        rotationCenterX: 100,
+                        rotationCenterY: 100
                     },
                     {
-                        assetId: '0fb9be3e8397c983338cb71dc84d0b25',
+                        assetId: '7AD771519D78ECA7D9EAC636C0400118',
                         name: translator(messages.costume, {index: 2}),
-                        bitmapResolution: 1,
-                        md5ext: '0fb9be3e8397c983338cb71dc84d0b25.svg',
-                        dataFormat: 'svg',
-                        rotationCenterX: 46,
-                        rotationCenterY: 53
+                        bitmapResolution: 2,
+                        md5ext: '7AD771519D78ECA7D9EAC636C0400118.png',
+                        dataFormat: 'png',
+                        rotationCenterX: 100,
+                        rotationCenterY: 100
                     }
                 ],
                 sounds: [
@@ -105,9 +105,9 @@ const projectData = translateFunction => {
                 ],
                 volume: 100,
                 visible: true,
-                x: 0,
-                y: 0,
-                size: 100,
+                x: -58,
+                y: 74,
+                size: 50,
                 direction: 90,
                 draggable: false,
                 rotationStyle: 'all around'
