@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  scratch-gui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: scratch-gui
+    ports:
+      - "8601:8601"
+    environment:
+      - NODE_ENV=development
+      - PORT=8601
+      - DEBUG=false
+    volumes:
+      # Mount source code để hot reload trong development
+      - .:/app
+      - /app/node_modules
+    restart: unless-stopped
+    networks:
+      - scratch-network
+
+  # Service để build production
+  scratch-gui-build:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: scratch-gui-build
+    command: ["npm", "run", "build"]
+    volumes:
+      - ./build:/app/build
+      - ./dist:/app/dist
+    networks:
+      - scratch-network
+
+networks:
+  scratch-network:
+    driver: bridge
+
+volumes:
+  node_modules:
